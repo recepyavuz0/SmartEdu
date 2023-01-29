@@ -17,8 +17,8 @@ exports.getAboutPage = (req, res) => {
   }
 
 exports.getCourseSinglePage = (req, res) => {
-    res.status(200).render('course-single',
-    {page_name : "course-single"}
+    res.status(200).render('course',
+    {page_name : "course"}
     )
   }
 

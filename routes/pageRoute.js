@@ -11,5 +11,4 @@ router.route('/contact').get(pageController.getContactPage);
 router.route('/dashboard').get(pageController.getDashbordPage);
 
 
-
 module.exports = router
