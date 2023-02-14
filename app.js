@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+var session = require('express-session')
 const pageRoute = require('./routes/pageRoute')
 const courseRoute = require('./routes/courseRoute')
 const userRoute = require('./routes/userRoute')
@@ -24,6 +25,12 @@ app.use('/', pageRoute);
 app.use('/courses', courseRoute);
 app.use('/categories', categoryRoute);
 app.use('/users', userRoute);
+app.use(session({
+  secret: 'my_keyboard_cat',
+  resave: false,
+  saveUninitialized: true
+}))
+
 
 const PORT = 3000;
 app.listen(PORT, () => {

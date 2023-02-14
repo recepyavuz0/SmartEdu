@@ -1,10 +1,13 @@
+
 exports.getIndexPage = (req, res) => {
+  console.log("--")
     res.status(200).render('index',
     {page_name : "index"}
     )
   }
 
 exports.getAboutPage = (req, res) => {
+  console.log("++")
     res.status(200).render('about',
     {page_name : "about"}
     )
@@ -35,6 +38,8 @@ exports.getDashbordPage = (req, res) => {
   }
 
   exports.getLoginPage = (req, res) => {
+    console.log("getLoginPage")
+    
     res.status(200).render('login',
     {page_name : "login"}
     )
