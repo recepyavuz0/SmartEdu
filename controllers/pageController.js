@@ -1,18 +1,17 @@
+//const session = require("express-session")
 
 exports.getIndexPage = (req, res) => {
-  console.log("--")
     res.status(200).render('index',
     {page_name : "index"}
     )
   }
 
 exports.getAboutPage = (req, res) => {
-  console.log("++")
     res.status(200).render('about',
     {page_name : "about"}
     )
   }
-
+  
   exports.getContactPage = (req, res) => {
     res.status(200).render('contact',
     {page_name : "contact"}
@@ -37,9 +36,7 @@ exports.getDashbordPage = (req, res) => {
     )
   }
 
-  exports.getLoginPage = (req, res) => {
-    console.log("getLoginPage")
-    
+  exports.getLoginPage = (req, res) => { 
     res.status(200).render('login',
     {page_name : "login"}
     )

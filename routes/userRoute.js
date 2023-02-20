@@ -5,6 +5,7 @@ const authController = require('../controllers/authController')
 
 const router = express.Router()
 
-router.route('/signup').post(authController.createUser); // hhtp://localhost:3000/categories kurs oluşturma
+router.route('/signup').post(authController.createUser);
 router.route('/login').post(authController.loginUser);
+router.route('/logout').get(authController.logoutUser);
 module.exports = router

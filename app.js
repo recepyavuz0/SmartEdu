@@ -1,6 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
-var session = require('express-session')
+const session = require('express-session')
+const MongoStore = require('connect-mongo');
+
 const pageRoute = require('./routes/pageRoute')
 const courseRoute = require('./routes/courseRoute')
 const userRoute = require('./routes/userRoute')
@@ -16,22 +18,29 @@ mongoose.connect('mongodb://localhost/smartedu-db').then(()=>{
 // Template Engine
 app.set("view engine","ejs")
 
+//global variable
+global.userIN = null
+
+//middlewares
 app.use(express.static("public"))
 app.use(express.json()) 
 app.use(express.urlencoded({ extended: true }))
+app.use(session({
+  secret: 'keyboard_cat',
+  resave: false,
+  saveUninitialized: true,
+  store: MongoStore.create({ mongoUrl: 'mongodb://localhost/smartedu-db' })
+})) 
 
 // Routes
+app.use('*',(req,res,next)=>{
+  userIN = req.session.userID;
+  next()
+})
 app.use('/', pageRoute);
 app.use('/courses', courseRoute);
 app.use('/categories', categoryRoute);
 app.use('/users', userRoute);
-app.use(session({
-  secret: 'my_keyboard_cat',
-  resave: false,
-  saveUninitialized: true
-}))
-
-
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`App started on port ${PORT}`);

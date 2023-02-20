@@ -17,29 +17,43 @@ exports.createUser = async (req, res) => {
       });
     }
   };
-
   exports.loginUser = async (req, res) => {
+
     try {
       const {email, password} = req.body
 
       let user = await User.findOne({email})
-      console.log("user : ",user._id)
+      
       if(user){
         bcrypt.compare(password,user.password,(err,same)=>{
             if(same){
                 //USER SESSİON
-                req.session.userID = user._id
-                console.log("sss:", user._id)
-                res.status(200).send('You are logged in');
+                req.session.userID = user._id;
+                console.log("login : ",req.session.userID)
+                res.status(200).redirect('/')
             }else{
                 res.status(401).send('You are not logged in');
             }
         })
     }
-    } catch (error) {
+    } catch (error) { 
       res.status(400).json({
         status: 'fail',
         error,
       });
     }
   };
+
+  exports.logoutUser = (req,res) =>{
+    try {
+      console.log("logout : ",req.session.userID)
+      req.session.destroy(()=>{
+        res.redirect('/')
+      })
+    } catch (error) {
+      res.status(400).json({
+        status: 'fail',
+        error,
+      });
+    }
+  }
