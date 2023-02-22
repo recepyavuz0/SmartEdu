@@ -1,5 +1,3 @@
-//const session = require("express-session")
-
 exports.getIndexPage = (req, res) => {
     res.status(200).render('index',
     {page_name : "index"}
@@ -27,12 +25,6 @@ exports.getCourseSinglePage = (req, res) => {
   exports.getCoursesPage = (req, res) => {
     res.status(200).render('courses',
     {page_name : "courses"}
-    )
-  }
-
-exports.getDashbordPage = (req, res) => {
-    res.status(200).render('dashboard',
-    {page_name : "dashboard"}
     )
   }
 
