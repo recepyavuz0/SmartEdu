@@ -23,15 +23,15 @@
 						</div>
 						<div class="course-br">
 							<div class="course-title">
-								<h2><a href="courses/<%= courses[i].slug  %>" title=""> <%= courses[i].name  %> </a></h2>
+								<h2><a href="/courses/<%= courses[i].slug  %>" title=""> <%= courses[i].name  %> </a></h2>
 							</div>
 							<div class="course-desc">
-								<p> <%= courses[i].desc  %> </p>
+								<p> <%= courses[i].desc.substring(0,100) %>... </p>
 							</div>
 						</div>
 						<div class="course-meta-bot">
 							<ul>
-								<li><i class="fa fa-user" aria-hidden="true"></i>Teacher Name</li>
+								<li><i class="fa fa-user" aria-hidden="true"></i><%= courses[i].user.name%></li>
 							</ul>
 						</div>
 					</div>
