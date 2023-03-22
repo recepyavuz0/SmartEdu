@@ -32,6 +32,49 @@
   </div>
   <!-- end row -->
 </div>
+<div id="overviews">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12 blog-post-single">
+        <div class="blog-author mb-4">
+          <div class="author-bio">
+            <h3 class="author_name">
+              <a href="#">Course From: <%= user.name %></a>
+            </h3>
+            <h5>CEO at <a href="#">SmartEDU</a></h5>
+          </div>
+        </div>
+      </div>
+      <!-- end col -->
+    </div>
+    <!-- end row -->
+    <div class="row">
+      <% for(let i =0 ; i < courses.length ;i++) { %>
+
+      <div class="col-lg-4 col-md-6 col-12">
+        <div class="course-item mb-5 mt-5">
+          <div class="course-br">
+            <div class="course-title">
+              <h2>
+                <a href="/courses/<%= courses[i].slug  %>" title="">
+                  <%= courses[i].name %>
+                </a>
+              </h2>
+            </div>
+            <div class="course-desc">
+              <p><%= courses[i].desc.substring(0,100) %>...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- end col -->
+      </div>
+        <% } %>
+        <!-- end row -->
+      
+    </div>
+  </div>
+</div>
 <!-- end container -->
 <!-- end section -->
 
@@ -122,16 +165,16 @@
 <% } %>
 
 <!-- Student Role -->
+<% if(user.role === 'student') { %>
 <div id="overviews">
   <div class="container">
     <div class="row">
       <div class="col-lg-12 blog-post-single">
-        <div class="blog-author">
+        <div class="blog-author mb-4">
           <div class="author-bio">
             <h3 class="author_name">
-              <a href="#">Course From: <%= user.name %></a>
+              <a href="#">Courses Enrolled by: <%= user.name %></a>
             </h3>
-            <h5>CEO at <a href="#">SmartEDU</a></h5>
           </div>
         </div>
       </div>
@@ -139,20 +182,20 @@
     </div>
     <!-- end row -->
     <div class="row">
-      <% for(let i =0 ; i < courses.length ;i++) { %>
+      <% for(let i =0 ; i < user.courses.length ;i++) { %>
 
       <div class="col-lg-4 col-md-6 col-12">
         <div class="course-item mb-5 mt-5">
           <div class="course-br">
             <div class="course-title">
               <h2>
-                <a href="/courses/<%= courses[i].slug  %>" title="">
-                  <%= courses[i].name %>
+                <a href="/courses/<%= user.courses[i].slug  %>" title="">
+                  <%= user.courses[i].name %>
                 </a>
               </h2>
             </div>
             <div class="course-desc">
-              <p><%= courses[i].desc.substring(0,100) %>...</p>
+              <p><%= user.courses[i].desc.substring(0,100) %>...</p>
             </div>
           </div>
         </div>
@@ -165,6 +208,7 @@
     </div>
   </div>
 </div>
+<% } %>
       <%- include('partials/_footer') -%>
     
   
