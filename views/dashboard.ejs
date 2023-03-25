@@ -197,7 +197,12 @@
             <div class="course-desc">
               <p><%= user.courses[i].desc.substring(0,100) %>...</p>
             </div>
+            <form action="/courses/release" method="POST">
+              <input type="hidden" name="course_id" value="<%=user.courses[i]._id%>">
+              <button class="btn btn-lg btn-danger text-white">RELEASE</button>
+            </form>
           </div>
+          
         </div>
 
         <!-- end col -->

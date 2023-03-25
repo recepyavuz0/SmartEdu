@@ -19,13 +19,13 @@ exports.createUser = async (req, res) => {
 exports.loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
-
     let user = await User.findOne({ email });
-
+    console.log('user login ',user)
     if (user) {
       bcrypt.compare(password, user.password, (err, same) => {
         if (same) {
           //USER SESSİON
+          console.log('user login ',user)
           req.session.userID = user._id;
           console.log('login : ', req.session.userID);
           res.status(200).redirect('/users/dashboard');
@@ -60,8 +60,6 @@ exports.getDashbordPage = async (req, res) => {
   const user = await User.findOne({ _id: req.session.userID }).populate('courses');
   const categories = await Category.find()
   const courses = await Course.find({user:req.session.userID})
-  console.log('courses : ',courses)
-  console.log('user : ',user)
   res.status(200).render('dashboard', {
     page_name: 'dashboard',
     user,

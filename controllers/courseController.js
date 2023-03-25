@@ -24,18 +24,26 @@ exports.createCourse = async (req, res) => {
 exports.getAllCourses = async (req, res) => {
   try {
     const categorySlug = req.query.categories;
-
+    const query = req.query.search;
     //data matching the categories query
     const category = await Category.findOne({ slug: categorySlug });
+    let filter = {};
+    filter = categorySlug ? { category: category._id } : filter;
+    filter = query ? { desc: query } : filter;
 
-    let filter = categorySlug ? { category: category._id } : {};
+    if (!query && !categorySlug) {
+      (filter.desc = ''), (filter.category = null);
+    }
 
-    //console.log('filter:',filter)
-    const courses = await Course.find(filter)
+    const courses = await Course.find({
+      $or: [
+        { desc: { $regex: '.*' + filter.desc + '.*', $options: 'i' } },
+        { category: filter.category },
+      ],
+    })
       .sort('-createdAt')
       .populate('user');
     const categories = await Category.find();
-
     res.status(200).render('courses', {
       courses,
       categories,
@@ -51,13 +59,17 @@ exports.getAllCourses = async (req, res) => {
 
 exports.getCourse = async (req, res) => {
   try {
+    const user = await User.findById(req.session.userID);
+
     const course = await Course.findOne({ slug: req.params.slug }).populate(
       'user'
     );
+    console.log('user:', user);
     const categories = await Category.find();
     res.status(200).render('course', {
       course,
       categories,
+      user,
       page_name: 'courses',
     });
   } catch (error) {
@@ -72,10 +84,24 @@ exports.enrollCourse = async (req, res) => {
   try {
     const user = await User.findById(req.session.userID);
     user.courses.addToSet({ _id: req.body.course_id });
-    console.log('user: ',user)
     await user.save();
 
-    res.status(200).redirect('/users/dashboard')
+    res.status(200).redirect('/users/dashboard');
+  } catch (error) {
+    res.status(400).json({
+      status: 'fail',
+      error: error,
+    });
+  }
+};
+
+exports.releaseCourse = async (req, res) => {
+  try {
+    const user = await User.findById(req.session.userID);
+    user.courses.pull({ _id: req.body.course_id });
+    await user.save();
+
+    res.status(200).redirect('/users/dashboard');
   } catch (error) {
     res.status(400).json({
       status: 'fail',
