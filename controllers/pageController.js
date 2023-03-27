@@ -1,3 +1,5 @@
+const nodemailer = require("nodemailer");
+
 exports.getIndexPage = (req, res) => {
     res.status(200).render('index',
     {page_name : "index"}
@@ -28,8 +30,9 @@ exports.getRegisterPage = (req, res) => {
     )
   }
 
-  exports.sendEmail = (req, res) => {
-    const nodemailer = require("nodemailer");
+  exports.sendEmail =  async (req, res) => {
+    try {
+      
     let output = `
     <h1>Mail Details</h1>
     <ul>
@@ -40,42 +43,37 @@ exports.getRegisterPage = (req, res) => {
     <p>${req.body.message}</p>
     `
 
-    nodemailer.createTestAccount((err, account) => {
-      if (err) {
-          console.error('Failed to create a testing account. ' + err.message);
-          return process.exit(1);
-      }
-      let transporter = nodemailer.createTransport({
-          host: account.smtp.host,
-          port: account.smtp.port,
-          secure: account.smtp.secure,
-          auth: {
-              user: account.user,
-              pass: account.pass
-          }
-      });
-
-      // Message object
-      let message = {
-          from: `Sender Name <${account.user}>`,
-          to: req.body.email,
-          subject: 'Nodemailer is unicode friendly ✔',
-          html: output
-      };
+    let transporter = nodemailer.createTransport({
+      host: "smtp.ethereal.email",
+      port: 587,
+      secure: false, // true for 465, false for other ports
+      auth: {
+        user: "geoffrey.bosco@ethereal.email", // generated ethereal user
+        pass: "2dMYBeec5kH77NUjjF", // generated ethereal password
+      },
+    });
   
-      transporter.sendMail(message, (err, info) => {
-          if (err) {
-              console.log('Error occurred. ' + err.message);
-              return process.exit(1);
-          }
+    // send mail with defined transport object
+    let info = await transporter.sendMail({
+      from: `SmartEDU <message@smartedu.com>`, // sender address
+      to: req.body.email, // list of receivers
+      subject: "Hello ✔", // Subject line
+      html: output
+    });
   
-          console.log('Message sent: %s', info.messageId);
-          // Preview only available when sending through an Ethereal account
-          console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-      });
-  });
+    console.log("Message sent: %s", info.messageId);
+    // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+  
+    // Preview only available when sending through an Ethereal account
+    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+    // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+    req.flash("success", "We Received your message succesfully");
+    } catch (err) {
+      req.flash("error", `Something happened!`);
+    }
+    
 
 
     console.log(req.body)
-    res.status(200).redirect('/contact')
+    res.status(200).redirect('contact')
   }
