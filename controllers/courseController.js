@@ -125,18 +125,16 @@ exports.deleteCourse = async (req, res) => {
 
 exports.updateCourse = async (req, res) => {
   try {
-    console.log('first', first)
     const course = await Course.findOne({slug:req.params.slug});
     course.name = req.body.name;
-    course.desc = req.body.description;
+    course.desc = req.body.desc;
     course.category = req.body.category;
     course.save();
-    console.log('last', last)
     req.flash("success",`${course.name} has been updated successfully`)
     res.status(200).redirect('/users/dashboard');
   } catch (error) {
     res.status(400).json({
-      status: 'fail',
+      status: 'fail update',
       error: error,
     });
   }

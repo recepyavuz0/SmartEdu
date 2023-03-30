@@ -20,6 +20,20 @@ exports.createUser = async (req, res) => {
   }
 };
 
+
+exports.deleteUser = async (req, res) => {
+  try {
+    const user = await User.findByIdAndRemove({_id:req.params.id});
+    console.log("id:",req.params.id)
+    await Course.deleteMany({user:req.params.id})
+    req.flash("success",`${user.email} has been deleted successfully`)
+    res.status(200).redirect('/users/dashboard')
+  } catch (error) {
+    req.flash("error",`${user.email} could not be deleted`)
+    res.status(400).redirect('/users/dashboard')
+  }
+};
+
 exports.loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -67,11 +81,13 @@ exports.logoutUser = (req, res) => {
 
 exports.getDashbordPage = async (req, res) => {
   const user = await User.findOne({ _id: req.session.userID }).populate('courses');
+  const users = await User.find();
   const categories = await Category.find()
   const courses = await Course.find({user:req.session.userID})
   res.status(200).render('dashboard', {
     page_name: 'dashboard',
     user,
+    users,
     categories,
     courses
   });

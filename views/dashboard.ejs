@@ -10,10 +10,9 @@
     </h1>
   </div>
 </div>
-
 <!-- Teacher Role -->
 <% if(user.role === 'teacher') { %>
-<div id="overviews" class="mt-5">
+  <div id="overviews" class="mt-5">
   <div class="container">
     <div class="row">
       <%- include('partials/_flash-message') -%>
@@ -32,8 +31,9 @@
     <!-- end row -->
   </div>
   <!-- end row -->
-</div>
-<div id="overviews">
+  </div>
+  
+  <div id="overviews">
   <div class="container">
     <div class="row">
       <div class="col-lg-12 blog-post-single">
@@ -128,9 +128,9 @@
                 <div class="col-sm-12">
                   <select class="form-control" name="category">
                     <% for(let i = 0; i < categories.length; i++) { %>
-                    <option value="<%= categories[i]._id %>">
-                      <%= categories[i].name %>
-                    </option>
+                          <option value="<%= categories[i]._id %>">
+                            <%= categories[i].name %>
+                          </option>
                     <% }%>
                   </select>
                 </div>
@@ -166,10 +166,9 @@
       
     </div>
   </div>
-</div>
+  </div>
 <!-- end container -->
 <!-- end section -->
-
 <!-- ADD Modal -->
 <div
   class="modal fade"
@@ -261,6 +260,7 @@
 <div id="overviews">
   <div class="container">
     <div class="row">
+      <%- include('partials/_flash-message') -%>
       <div class="col-lg-12 blog-post-single">
         <div class="blog-author mb-4">
           <div class="author-bio">
@@ -303,7 +303,139 @@
   </div>
 </div>
 <% } %>
-      <%- include('partials/_footer') -%>
+
+<% if(user.role === 'admin') { %>
+  <div id="overviews">
+    <div class="container">
+      <div class="row">
+        <%- include('partials/_flash-message') -%>
+        <div class="col-lg-12 blog-post-single">
+          <div class="blog-author mb-4">
+            <div class="author-bio">
+              <h3 class="author_name">
+                <a href="#">Courses Enrolled by: <%= user.name %></a>
+              </h3>
+            </div>
+          </div>
+        </div>
+        <!-- end col -->
+      </div>
+      <!-- end row -->
+      <div class="row mt-5">
+        <h2>Users</h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">ID#</th>
+              <th scope="col">Email</th>
+              <th scope="col">Role</th>
+              <th scope="col">Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% for(let i =0 ; i < users.length ;i++) { %>
+            <tr>
+              <th scope="row"><%= users[i]._id %> </th>
+              <td><%= users[i].email %></td>
+              <td><%= users[i].role %></td>
+              <td><a href="/users/<%= users[i]._id %>?_method=DELETE"
+                onclick="return confirm('ARE YOU SURE')" class="btn btn-danger rounded-0 text-white"><span>DELETE</span></a></td>
+            </tr>
+            <% } %>
+          </tbody>
+        </table>
+          <!-- end row -->
+      </div>
+
+      <div class="row mt-5">
+        <h2>Categories</h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">ID#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Add</th>
+              <th scope="col">Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% for(let i =0 ; i < categories.length ;i++) { %>
+            <tr>
+              <th scope="row"><%= categories[i]._id %> </th>
+              <td><%= categories[i].name %></td>
+              <td><button
+                class="btn btn-primary rounded-0 text-white"
+                href="#"
+                data-toggle="modal"
+                data-target="#addCategory"
+              >
+                <span>Add</span>
+              </button></td>
+              <td><a href="/categories/<%= categories[i]._id %>?_method=DELETE"
+                onclick="return confirm('ARE YOU SURE')" class="btn btn-danger rounded-0 text-white"><span>DELETE</span></a></td>
+            </tr>
+            <% } %>
+          </tbody>
+        </table>
+          <!-- end row -->
+      </div>
+
+    </div>
+  </div>
+  <div
+  class="modal fade"
+  id="addCategory"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="myModalLabel"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-body customer-box">
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div class="tab-pane active" id="Login">
+            <form method="POST" action="/categories" class="form-horizontal">
+              
+              <div class="form-group">
+                <div class="col-sm-12">
+                  <input
+                    type="text"
+                    name="name"
+                    class="form-control"
+                    placeholder="Category Name"
+                  />
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm-10">
+                  <button
+                    type="submit"
+                    class="btn btn-light btn-radius btn-brd grd1"
+                  >
+                    Submit
+                  </button>
+                  <button
+                    type="submit"
+                    class="btn btn-light btn-radius btn-brd grd1"
+                    data-dismiss="modal"
+                    aria-hidden="true"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  <% } %>
+
+<%- include('partials/_footer') -%>
     
   
 
